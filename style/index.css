@@ -1,5 +1,3 @@
-
-
 .jp-kernelspy-view .jp-kernelspy-toolbar {
   border-bottom: var(--jp-border-width) solid var(--jp-toolbar-border-color);
   padding: 2px;
@@ -55,12 +53,17 @@ button.jp-kernelspy-threadcollapser {
   height: 1em;
 }
 
-.jp-kernelspy-view .jp-kernelspy-threadcollapser.jp-mod-children.jp-mod-collapsed {
+.jp-kernelspy-view
+  .jp-kernelspy-threadcollapser.jp-mod-children.jp-mod-collapsed {
   background-image: var(--jp-image-caretright);
 }
 
 .jp-kernelspyIcon {
   background-image: var(--jp-icon-json);
+}
+
+.jp-exTimeIcon {
+  background-image: var(--jp-icon-link);
 }
 
 .jp-kernelspy-collapseIcon {
@@ -69,4 +72,26 @@ button.jp-kernelspy-threadcollapser {
 
 .jp-kernelspy-expandIcon {
   background-image: var(--jp-image-caretdown);
+}
+
+.jp-execute-time {
+  padding: 3px;
+  border: none;
+  border-top: 1px solid #cacaca;
+  font-size: 70%;
+}
+
+.jp-kernel-message {
+  padding: 3px;
+  border: none;
+  border-top: 1px solid #cacaca;
+  font-size: 70%;
+}
+
+.jp-display-none {
+  display: none;
+}
+
+.jp-display-block {
+  display: block;
 }
