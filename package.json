@@ -1,5 +1,5 @@
 {
-  "name": "jupyterlab-kernel-message",
+  "name": "@ostter/jupyterlab-kernel-message",
   "version": "0.2.2",
   "description": "A Jupyter Lab extension for inspecting messages to/from a kernel",
   "keywords": [
