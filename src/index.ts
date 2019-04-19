@@ -161,6 +161,8 @@ export class KernelMessageInspector {
     if (msg.header.msg_type === "execute_request" && msg.channel === "shell") {
       msg.metadata.notebookName = this._getNootebookName();
       msg.metadata.userName = this.userName;
+      msg.content.notebookName = this._getNootebookName();
+      msg.content.userName = this.userName;
     }
   }
 
@@ -184,14 +186,18 @@ export class KernelMessageInspector {
   private _executeCustomMessage(): void {
     const kernel = this.tracker.currentWidget!.context.session.kernel;
     let options: IOptions = {
-      msgType: "comm_msg",
-      channel: "shell",
+      msgType: "display_data",
+      channel: "iopub",
       username: kernel!.username,
       session: kernel!.clientId
     };
     let content = {
-      comm_id: "1",
-      data: "session connected"
+      comm_id: 'string',
+      data: {
+        "custom mes": "custom mes"
+      },
+      notebookName: this._getNootebookName(),
+      userName: this.userName
     };
 
     let metadata = {

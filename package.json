@@ -1,6 +1,6 @@
 {
   "name": "jupyterlab-kernel-message",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A Jupyter Lab extension for inspecting messages to/from a kernel",
   "keywords": [
     "jupyter",
