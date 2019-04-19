@@ -1,8 +1,6 @@
-# jupyterlab-kernelspy
+# jupyterlab-kernel-message
 
 An extension for inspecting messages to/from a kernel in Jupyter Lab.
-
-![screenshot](screenshot.png)
 
 ## Prerequisites
 
@@ -11,17 +9,8 @@ An extension for inspecting messages to/from a kernel in Jupyter Lab.
 ## Installation
 
 ```bash
-jupyter labextension install jupyterlab-kernelspy
+jupyter labextension install @ostter/jupyterlab-kernel-message
 ```
-
-## Update
-
-From JupyterLab 0.34 onwards, you can update the extension to the latest compatible version with:
-
-```bash
-jupyter labextension update jupyterlab-kernelspy
-```
-
 
 ## Development
 
