@@ -1,15 +1,15 @@
 {
   "name": "jupyterlab-kernel-message",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Jupyter Lab extension for inspecting messages to/from a kernel",
   "keywords": [
     "jupyter",
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/ostter/jupyterlab-kernel-message",
+  "homepage": "https://github.com/Ostter/jupyterlab-kernel-message",
   "bugs": {
-    "url": "https://github.com/ostter/jupyterlab-kernel-message/issues"
+    "url": "https://github.com/Ostter/jupyterlab-kernel-message"
   },
   "license": "BSD-3-Clause",
   "author": "Konstantin Sharov",
@@ -21,7 +21,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ostter/jupyterlab-kernel-message.git"
+    "url": "https://github.com/Ostter/jupyterlab-kernel-message.git"
   },
   "scripts": {
     "build": "tsc",

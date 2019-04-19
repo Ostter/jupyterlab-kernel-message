@@ -120,7 +120,7 @@ export class MessageLogView extends VDomRenderer<KernelSpyModel> {
   private _executedTime: {
     [key: string]: string;
   } = {};
-  private _lastExecuteTime: string = '0';
+  private _lastExecuteTime: string = "0";
   private _onExecute: Function;
 
   constructor(model: KernelSpyModel, onExecute: Function) {
@@ -198,14 +198,14 @@ export class MessageLogView extends VDomRenderer<KernelSpyModel> {
         );
       }
 
-      //request message
-      if (
-        args.msg.header.msg_type === "execute_request" &&
-        args.msg.channel === "shell"
-      ) {
-        args.msg.metadata.nameNotebook = 'notebook001';
-        args.msg.metadata.nameUser = 'User001'
-      }
+      // //request message
+      // if (
+      //   args.msg.header.msg_type === "execute_request" &&
+      //   args.msg.channel === "shell"
+      // ) {
+      //   args.msg.metadata.nameNotebook = 'notebook001';
+      //   args.msg.metadata.nameUser = 'User001'
+      // }
 
       //add child message
       // let msg_id = args.msg.parent_header['msg_id'];

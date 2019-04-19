@@ -43,7 +43,7 @@ interface IOptions {
   msgId?: string;
 }
 
-type Channel = 'shell' | 'iopub' | 'stdin';
+type Channel = "shell" | "iopub" | "stdin";
 
 const CommandIDs = <CommandString>{
   kernelmessage: "kernelink:new",
@@ -70,6 +70,7 @@ export class KernelMessageInspector {
   public kernelSpyViewArray: {
     [id: string]: KernelSpyView;
   } = {};
+  protected userName: string;
 
   constructor(
     commands: CommandRegistry,
@@ -80,8 +81,18 @@ export class KernelMessageInspector {
     this.tracker = tracker;
     this.shell = shell;
     this.tracker.widgetAdded.connect(this._onAddWidget, this);
-    this.tracker.currentChanged.connect(this._onCurrentChanged, this);
-    this.commands.commandExecuted.connect(this._onCommandExecuted, this)
+    this.commands.commandExecuted.connect(this._onCommandExecuted, this);
+    this._getUserName();
+  }
+
+  private _getUserName(): void {
+    this.userName = location.pathname.split("/")[3] || "";
+  }
+
+  private _getNootebookName(): string | null {
+    return (
+      this.tracker.currentWidget && this.tracker.currentWidget.context.path
+    );
   }
 
   /**
@@ -113,10 +124,8 @@ export class KernelMessageInspector {
                 this.onCompliteExecute
               );
             }
-            this._executeCustomMes();
-            let kernel = <Kernel.IKernel> session.kernel;
+            let kernel = <Kernel.IKernel>session.kernel;
             kernel.anyMessage.connect(this._onMessage, this);
-
           });
           break;
         default:
@@ -145,16 +154,14 @@ export class KernelMessageInspector {
     }
   };
 
-
   private _onMessage(sender: Kernel.IKernel, args: Kernel.IAnyMessageArgs) {
     const { msg } = args;
-    console.log('msgKern',msg);
-  }
 
-
-  private _onCurrentChanged(tracker: INotebookTracker, widget: NotebookPanel): void {
-    console.log('_onCurrenttracker',tracker);
-    console.log('_onCurrentwidget',widget);
+    //request message
+    if (msg.header.msg_type === "execute_request" && msg.channel === "shell") {
+      msg.metadata.notebookName = this._getNootebookName();
+      msg.metadata.userName = this.userName;
+    }
   }
 
   private _onAddWidget(tracker: INotebookTracker, widget: NotebookPanel): void {
@@ -165,27 +172,31 @@ export class KernelMessageInspector {
     });
   }
 
-  private _onCommandExecuted(command: CommandRegistry, args: CommandRegistry.ICommandExecutedArgs): void {
-    console.log('command',command);
-    console.log('args',args);
+  private _onCommandExecuted(
+    command: CommandRegistry,
+    args: CommandRegistry.ICommandExecutedArgs
+  ): void {
+    if (args.id === "apputils:save-statedb") {
+      this._executeCustomMessage();
+    }
   }
 
-  private _executeCustomMes(): void {
+  private _executeCustomMessage(): void {
     const kernel = this.tracker.currentWidget!.context.session.kernel;
     let options: IOptions = {
-      msgType: 'comm_msg',
-      channel: 'shell',
+      msgType: "comm_msg",
+      channel: "shell",
       username: kernel!.username,
       session: kernel!.clientId
     };
     let content = {
-      comm_id: '1',
-      data: '2'
+      comm_id: "1",
+      data: "session connected"
     };
 
     let metadata = {
-      nameNotebook: 'notebook001',
-      nameUser: 'User001'
+      notebookName: this._getNootebookName(),
+      userName: this.userName
     };
 
     let msg = KernelMessage.createShellMessage(options, content, metadata);
