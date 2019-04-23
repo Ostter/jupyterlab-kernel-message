@@ -124,8 +124,8 @@ export class KernelMessageInspector {
                 this.onCompliteExecute
               );
             }
-            let kernel = <Kernel.IKernel>session.kernel;
-            kernel.anyMessage.connect(this._onMessage, this);
+            // let kernel = <Kernel.IKernel>session.kernel;
+            // kernel.anyMessage.connect(this._onMessage, this);
           });
           break;
         default:
@@ -154,17 +154,17 @@ export class KernelMessageInspector {
     }
   };
 
-  private _onMessage(sender: Kernel.IKernel, args: Kernel.IAnyMessageArgs) {
-    const { msg } = args;
-
-    //request message
-    if (msg.header.msg_type === "execute_request" && msg.channel === "shell") {
-      msg.metadata.notebookName = this._getNootebookName();
-      msg.metadata.userName = this.userName;
-      msg.content.notebookName = this._getNootebookName();
-      msg.content.userName = this.userName;
-    }
-  }
+  // private _onMessage(sender: Kernel.IKernel, args: Kernel.IAnyMessageArgs) {
+  //   const { msg } = args;
+  //
+  //   //request message
+  //   if (msg.header.msg_type === "execute_request" && msg.channel === "shell") {
+  //     msg.metadata.notebookName = this._getNootebookName();
+  //     msg.metadata.userName = this.userName;
+  //     msg.content.notebookName = this._getNootebookName();
+  //     msg.content.userName = this.userName;
+  //   }
+  // }
 
   private _onAddWidget(tracker: INotebookTracker, widget: NotebookPanel): void {
     widget.context.session.kernelChanged.connect(this._onAddWKernel, this);
@@ -178,31 +178,36 @@ export class KernelMessageInspector {
     command: CommandRegistry,
     args: CommandRegistry.ICommandExecutedArgs
   ): void {
-    if (args.id === "apputils:save-statedb") {
-      this._executeCustomMessage();
+    const events = [
+      "filebrowser:rename",
+      "apputils:save-statedb",
+      "filebrowser:delete"
+    ];
+    if (events.indexOf(args.id) !== -1) {
+      this._executeCustomMessage(args.id);
     }
   }
 
-  private _executeCustomMessage(): void {
+  private _executeCustomMessage(id: string): void {
     const kernel = this.tracker.currentWidget!.context.session.kernel;
+    if (!kernel) return;
     let options: IOptions = {
-      msgType: "display_data",
-      channel: "iopub",
+      msgType: "kernel_info_request",
+      channel: "shell",
       username: kernel!.username,
       session: kernel!.clientId
     };
     let content = {
-      comm_id: 'string',
+      comm_id: "string",
       data: {
-        "custom mes": "custom mes"
-      },
-      notebookName: this._getNootebookName(),
-      userName: this.userName
+        "custom message": "custom message"
+      }
     };
 
     let metadata = {
       notebookName: this._getNootebookName(),
-      userName: this.userName
+      userName: this.userName,
+      eventId: id
     };
 
     let msg = KernelMessage.createShellMessage(options, content, metadata);
@@ -261,14 +266,6 @@ export class KernelMessageInspector {
     cellKernelMessage.className = `jp-kernel-message jp-display-none`;
     cellKernelMessage.innerHTML = `kernel message`;
     cell.editorWidget.node.appendChild(cellKernelMessage);
-
-    // let currentValue = metadata.get("Existed_time");
-    // update cell metadata and class with new value if toggle button 'executetime' was clicked
-    // if (!currentValue) {
-    //     // metadata.set("Existed_time", { startTime: "123", endTime: "456" });
-    // } else {
-    //     // metadata.set("Existed_time", { startTime: "123", endTime: "456" });
-    // }
   };
 
   public messagelog = (kernelId: string) => {
