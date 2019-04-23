@@ -124,6 +124,9 @@ export class KernelMessageInspector {
                 this.onCompliteExecute
               );
             }
+            //event "docmanager:open"
+            this._executeCustomMessage("docmanager:open");
+
             // let kernel = <Kernel.IKernel>session.kernel;
             // kernel.anyMessage.connect(this._onMessage, this);
           });
@@ -176,26 +179,29 @@ export class KernelMessageInspector {
 
   private _onCommandExecuted(
     command: CommandRegistry,
-    args: CommandRegistry.ICommandExecutedArgs
+    executedArgs: CommandRegistry.ICommandExecutedArgs
   ): void {
     const events = [
       "filebrowser:rename",
-      "apputils:save-statedb",
-      "filebrowser:delete"
+      "filebrowser:delete",
+      "filebrowser:shutdown"
     ];
-    if (events.indexOf(args.id) !== -1) {
-      this._executeCustomMessage(args.id);
+    const { id } = executedArgs;
+    if (events.indexOf(id) !== -1) {
+      this._executeCustomMessage(id);
     }
   }
 
   private _executeCustomMessage(id: string): void {
-    const kernel = this.tracker.currentWidget!.context.session.kernel;
+    const kernel =
+      !!this.tracker.currentWidget &&
+      this.tracker.currentWidget.context.session.kernel;
     if (!kernel) return;
     let options: IOptions = {
       msgType: "kernel_info_request",
       channel: "shell",
-      username: kernel!.username,
-      session: kernel!.clientId
+      username: kernel.username,
+      session: kernel.clientId
     };
     let content = {
       comm_id: "string",
@@ -211,7 +217,7 @@ export class KernelMessageInspector {
     };
 
     let msg = KernelMessage.createShellMessage(options, content, metadata);
-    kernel!.sendShellMessage(msg, false, true);
+    kernel.sendShellMessage(msg, false, true);
   }
 
   private _createButtons(nb: NotebookPanel) {

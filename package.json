@@ -1,6 +1,6 @@
 {
   "name": "@ostter/jupyterlab-kernel-message",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "description": "A Jupyter Lab extension for show messages to/from a kernel due cell execute, calculation time and send custom messages",
   "keywords": [
     "jupyter",
@@ -26,8 +26,7 @@
     "build": "tsc",
     "clean": "rimraf lib",
     "watch": "tsc -w",
-    "prepare": "npm run clean && npm run build",
-    "publish": "npm publish --access=public"
+    "prepare": "npm run clean && npm run build"
   },
   "dependencies": {
     "@jupyterlab/application": "^0.19.1",
