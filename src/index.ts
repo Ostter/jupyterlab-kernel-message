@@ -86,7 +86,7 @@ export class KernelMessageInspector {
   }
 
   private _getUserName(): void {
-    this.userName = location.pathname.split("/")[3] || "";
+    this.userName = location.pathname.split("/")[2] || "";
   }
 
   private _getNootebookName(): string | null {
@@ -111,6 +111,7 @@ export class KernelMessageInspector {
     session.statusChanged.connect((sender, new_status: Kernel.Status) => {
       switch (new_status) {
         case "restarting":
+          this._executeCustomMessage("kernel:restart");
           break;
         case "idle":
           break;
